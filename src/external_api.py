@@ -43,7 +43,7 @@ def get_exchange_rate(from_currency, to_currency="RUB"):
         return None
 
 
-def get_sp500_stock_price(symbol) -> float:
+def get_sp500_stock_price(symbol):
     """Возвращает текущую стоимость акции из S&P 500."""
     url = f"{BASE_SNP_URL}?function=GLOBAL_QUOTE&symbol={symbol}&apikey={SNP_API}"
 
@@ -56,7 +56,7 @@ def get_sp500_stock_price(symbol) -> float:
 
         if price:
             logging.info(f"Стоимость акции {symbol}: {price}")
-            return float(price)
+            return {"stock": symbol, "price": price}
         else:
             logging.error(f"Не удалось получить стоимость акции {symbol}. Данные: {data}")
             return 0.0

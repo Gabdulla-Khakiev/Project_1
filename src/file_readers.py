@@ -22,3 +22,7 @@ def read_transactions_from_excel(file_path: str):
     except Exception as e:
         logging.error(f"Ошибка чтения Excel-файла: {e}")
         return []
+
+
+if __name__ == "__main__":
+    print(read_transactions_from_excel("data/operations.xlsx"))

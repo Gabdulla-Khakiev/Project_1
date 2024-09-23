@@ -1,5 +1,6 @@
 import pytest
 import pandas as pd
+import datetime
 
 
 @pytest.fixture()
@@ -57,3 +58,19 @@ def mock_transactions():
         'Категория': ['Покупки', 'Снятие наличных'],
         'Описание': ['Покупка продуктов', 'Снятие в банкомате']
     })
+
+
+@pytest.fixture
+def transactions_for_views():
+    return [{'Номер карты': '*5814', 'Сумма операции с округлением': 1262.00},
+    {'Номер карты': '*7512', 'Сумма операции с округлением': 7.94},
+    {'date': '21.12.2021', 'amount': 1198.23, 'category': 'Переводы',
+     'description': 'Перевод Кредитная карта. ТП 10.2 RUR'},
+    {'date': '20.12.2021', 'amount': 829.00, 'category': 'Супермаркеты',
+     'description': 'Лента'},
+    {'date': '20.12.2021', 'amount': 421.00, 'category': 'Различные товары',
+     'description': 'Ozon.ru'},
+    {'date': '16.12.2021', 'amount': -14216.42, 'category': 'ЖКХ',
+     'description': 'ЖКУ Квартира'},
+    {'date': '16.12.2021', 'amount': 453.00, 'category': 'Бонусы',
+     'description': 'Кешбэк за обычные покупки'}]

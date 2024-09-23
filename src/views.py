@@ -1,9 +1,16 @@
 import json
+import logging
 from src.file_readers import read_transactions_from_excel
 from _datetime import datetime
 from src.utils import get_greeting, process_card_data, get_top_5_transactions
-# from src.external_api import get_exchange_rate, get_sp500_stock_price
+from src.external_api import get_exchange_rate, get_sp500_stock_price
 from datetime import datetime
+
+
+file_handler = logging.FileHandler('app.log', mode='a', encoding='utf-8')
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
 
 def load_user_settings(file_path: str = 'data/user_settings.json') -> dict:
