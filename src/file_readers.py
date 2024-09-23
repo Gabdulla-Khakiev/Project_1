@@ -2,12 +2,10 @@ import pandas as pd
 import logging
 
 
-logging.basicConfig(
-    level=logging.INFO,  # Уровень логирования
-    format='%(asctime)s - %(levelname)s - %(message)s',  # Формат вывода
-    filename='app.log',  # Логи будут сохраняться в файл 'app.log'
-    filemode='a'  # Режим записи (a - добавление к файлу)
-)
+file_handler = logging.FileHandler('app.log', mode='a', encoding='utf-8')
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
 
 def read_transactions_from_excel(file_path: str):

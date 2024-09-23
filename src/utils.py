@@ -3,12 +3,10 @@ from datetime import datetime
 from src.file_readers import read_transactions_from_excel
 
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='app.log',
-    filemode='a'
-)
+file_handler = logging.FileHandler('app.log', mode='a', encoding='utf-8')
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
 
 def get_greeting(current_time: datetime) -> str:

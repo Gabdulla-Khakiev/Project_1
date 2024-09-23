@@ -6,12 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='app.log',
-    filemode='a'
-)
+# Настраиваем формат логов
+file_handler = logging.FileHandler('app.log', mode='a', encoding='utf-8')
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
 BASE_EXCHANGES_URL = 'https://api.apilayer.com/exchangerates_data/latest'
 EXCHANGES_API = os.getenv("EXCHANGES_API")
@@ -67,13 +66,13 @@ def get_sp500_stock_price(symbol) -> float:
         return 0.0
 
 
-if __name__ == "__main__":
-    snp_settings = list(load_user_settings().get('user_stocks', []))
-
-    if snp_settings:
-        for stock_symbol in snp_settings:
-            logging.info(f"Получение стоимости для акции: {stock_symbol}")
-            price = get_sp500_stock_price(stock_symbol)
-            print(f"Стоимость акции {stock_symbol}: {price}")
-    else:
-        logging.warning("Настройки пользователя не содержат акций для отслеживания.")
+# if __name__ == "__main__":
+#     snp_settings = list(load_user_settings().get('user_stocks', []))
+#
+#     if snp_settings:
+#         for stock_symbol in snp_settings:
+#             logging.info(f"Получение стоимости для акции: {stock_symbol}")
+#             price = get_sp500_stock_price(stock_symbol)
+#             print(f"Стоимость акции {stock_symbol}: {price}")
+#     else:
+#         logging.warning("Настройки пользователя не содержат акций для отслеживания.")
