@@ -1,7 +1,6 @@
 import requests
 import os
 import logging
-from src.views import load_user_settings
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -64,15 +63,3 @@ def get_sp500_stock_price(symbol) -> float:
     except requests.RequestException as e:
         logging.error(f"Ошибка при запросе стоимости акции {symbol}: {e}")
         return 0.0
-
-
-# if __name__ == "__main__":
-#     snp_settings = list(load_user_settings().get('user_stocks', []))
-#
-#     if snp_settings:
-#         for stock_symbol in snp_settings:
-#             logging.info(f"Получение стоимости для акции: {stock_symbol}")
-#             price = get_sp500_stock_price(stock_symbol)
-#             print(f"Стоимость акции {stock_symbol}: {price}")
-#     else:
-#         logging.warning("Настройки пользователя не содержат акций для отслеживания.")

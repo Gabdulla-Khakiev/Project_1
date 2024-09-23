@@ -22,11 +22,3 @@ def read_transactions_from_excel(file_path: str):
     except Exception as e:
         logging.error(f"Ошибка чтения Excel-файла: {e}")
         return []
-
-
-if __name__ == "__main__":
-    transactions = read_transactions_from_excel("data/operations.xlsx")
-    if transactions:
-        logging.info("Транзакции успешно загружены и готовы к обработке.")
-    else:
-        logging.warning("Не удалось загрузить транзакции.")

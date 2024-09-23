@@ -88,22 +88,3 @@ def get_top_5_transactions(transactions: list) -> list:
     except Exception as e:
         logging.error(f"Ошибка при сортировке транзакций: {e}")
         return []
-
-
-if __name__ == "__main__":
-    try:
-        transactions = read_transactions_from_excel('data/operations.xlsx')
-        if transactions:
-            logging.info("Транзакции успешно загружены.")
-        else:
-            logging.warning("Не удалось загрузить транзакции.")
-
-        # Обработка данных по картам
-        card_data = process_card_data(transactions)
-        print(card_data)
-
-        # Получение топ-5 транзакций
-        top_transactions = get_top_5_transactions(transactions)
-        print(top_transactions)
-    except Exception as e:
-        logging.error(f"Ошибка выполнения программы: {e}")
