@@ -1,9 +1,17 @@
 import requests
 import os
+import logging
 from src.views import load_user_settings
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    filename='app.log',
+    filemode='a'
+)
 
 BASE_EXCHANGES_URL = 'https://api.apilayer.com/exchangerates_data/latest'
 EXCHANGES_API = os.getenv("EXCHANGES_API")
@@ -18,39 +26,54 @@ def get_exchange_rate(from_currency, to_currency="RUB"):
     headers = {"apikey": EXCHANGES_API}
 
     try:
+        logging.info(f"Запрос курса валют: {from_currency} -> {to_currency}")
         response = requests.get(url, headers=headers)
-        response.raise_for_status()
+        response.raise_for_status()  # Проверка статуса ответа
         data = response.json()
-        base = data.get("base")
-        rates = data.get("rates").get("RUB")
 
         if data.get("success") and "rates" in data:
             base = data.get("base")
             rates = data.get("rates").get(to_currency)
-
-        if base and rates is not None:
+            logging.info(f"Успешно получен курс валют: {from_currency} -> {to_currency}: {rates}")
             return {"base": base, "rates": rates}
+        else:
+            logging.error(f"Ошибка в данных курса валют: {data}")
+            return None
 
     except requests.RequestException as e:
-        print(f"Ошибка при получении курса валют: {e}")
+        logging.error(f"Ошибка при запросе курса валют: {e}")
         return None
 
 
 def get_sp500_stock_price(symbol) -> float:
     """Возвращает текущую стоимость акции из S&P 500."""
-    params = {
-        'function': 'TIME_SERIES_INTRADAY',
-        'symbol': symbol,
-        'interval': '1min',
-        'apikey': SNP_API
-    }
     url = f"{BASE_SNP_URL}?function=GLOBAL_QUOTE&symbol={symbol}&apikey={SNP_API}"
-    response = requests.get(url)
-    data = response.json()
-    # return float(data["Global Quote"]["05. price"])
-    return data
+
+    try:
+        logging.info(f"Запрос стоимости акции: {symbol}")
+        response = requests.get(url)
+        response.raise_for_status()  # Проверка статуса ответа
+        data = response.json()
+        price = data.get("Global Quote", {}).get("05. price")
+
+        if price:
+            logging.info(f"Стоимость акции {symbol}: {price}")
+            return float(price)
+        else:
+            logging.error(f"Не удалось получить стоимость акции {symbol}. Данные: {data}")
+            return 0.0
+    except requests.RequestException as e:
+        logging.error(f"Ошибка при запросе стоимости акции {symbol}: {e}")
+        return 0.0
 
 
 if __name__ == "__main__":
-    snp_settings = list(load_user_settings().get('user_stocks'))
-    print(get_sp500_stock_price(snp_settings))
+    snp_settings = list(load_user_settings().get('user_stocks', []))
+
+    if snp_settings:
+        for stock_symbol in snp_settings:
+            logging.info(f"Получение стоимости для акции: {stock_symbol}")
+            price = get_sp500_stock_price(stock_symbol)
+            print(f"Стоимость акции {stock_symbol}: {price}")
+    else:
+        logging.warning("Настройки пользователя не содержат акций для отслеживания.")
