@@ -23,6 +23,13 @@ def get_greeting(current_time: datetime) -> str:
 
     logging.info(f"Время: {current_time}, Приветствие: {greeting}")
     return greeting
+        return "Доброе утро"
+    elif 12 <= hour < 17:
+        return "Добрый день"
+    elif 17 <= hour < 22:
+        return "Добрый вечер"
+    else:
+        return "Доброй ночи"
 
 
 def process_card_data(transactions):
@@ -46,11 +53,19 @@ def process_card_data(transactions):
             except ValueError as e:
                 logging.error(f"Ошибка при обработке суммы транзакции для карты {card_number}: {e}")
                 continue
+            # Получаем сумму операции
+            amount = float(transaction.get("Сумма операции с округлением"))
+            # Если карта уже есть в словаре, добавляем сумму, иначе создаем запись
+            if card_number in cards_summary:
+                cards_summary[card_number] += amount
+            else:
+                cards_summary[card_number] = amount
 
     cards_summ = [{"Номер карты": key, "Сумма трат": value} for key, value in cards_summary.items()]
 
     for t in cards_summ:
         total_spent = t.get("Сумма трат", 0)
+
         if total_spent > 0:  # Проверяем, чтобы сумма была больше нуля
             card_info = {
                 "last_digit": t.get("Номер карты")[-4:],
@@ -63,6 +78,8 @@ def process_card_data(transactions):
             cards_information.append(card_info)
 
     logging.info(f"Обработаны данные по {len(cards_information)} картам.")
+            cards_information.append(card_info)
+
     return cards_information
 
 
@@ -88,3 +105,19 @@ def get_top_5_transactions(transactions: list) -> list:
     except Exception as e:
         logging.error(f"Ошибка при сортировке транзакций: {e}")
         return []
+    sorted_transactions = []
+    transactions = sorted(transactions, key=lambda x: float(x.get('Сумма операции с округлением')), reverse=True)
+    for t in transactions:
+        transaction = {
+            "date": t.get("Дата платежа"),
+            "amount": t.get("Сумма платежа"),
+            "category": t.get("Категория"),
+            "description": t.get("Описание")
+        }
+        sorted_transactions.append(transaction)
+    return sorted_transactions[:5]
+
+
+if __name__ == "__main__":
+    transactions = read_transactions_from_excel('data/operations.xlsx')
+    print(process_card_data(transactions))
