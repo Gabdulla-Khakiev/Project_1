@@ -1,6 +1,6 @@
-import re
 import json
 import logging
+import re
 
 # Регулярное выражение для поиска номеров телефонов
 PHONE_REGEX = r"\+7\s\d{3}\s\d{3}-\d{2}-\d{2}"

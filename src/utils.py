@@ -1,10 +1,9 @@
 import logging
 from datetime import datetime
-from src.file_readers import read_transactions_from_excel
 
 
-file_handler = logging.FileHandler('app.log', mode='a', encoding='utf-8')
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler = logging.FileHandler("app.log", mode="a", encoding="utf-8")
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(formatter)
 logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
@@ -55,11 +54,12 @@ def process_card_data(transactions):
             card_info = {
                 "last_digit": t.get("Номер карты")[-4:],
                 "total_spent:": total_spent,
-                "cashback": total_spent // 100
+                "cashback": total_spent // 100,
             }
 
             logging.info(
-                f"Данные по карте {t.get('Номер карты')[-4:]}: Траты - {total_spent}, Кэшбэк - {card_info['cashback']}")
+                f"Данные по карте {t.get('Номер карты')[-4:]}: Траты - {total_spent}, Кэшбэк - {card_info['cashback']}"
+            )
             cards_information.append(card_info)
 
     logging.info(f"Обработаны данные по {len(cards_information)} картам.")
@@ -70,8 +70,9 @@ def get_top_5_transactions(transactions: list) -> list:
     """Возвращает топ-5 транзакций по сумме платежа."""
     try:
         logging.info("Сортировка транзакций по сумме.")
-        sorted_transactions = sorted(transactions, key=lambda x: float(x.get('Сумма операции с округлением', 0)),
-                                     reverse=True)
+        sorted_transactions = sorted(
+            transactions, key=lambda x: float(x.get("Сумма операции с округлением", 0)), reverse=True
+        )
         top_5 = sorted_transactions[:5]
         logging.info(f"Топ-5 транзакций: {top_5}")
 
@@ -81,7 +82,7 @@ def get_top_5_transactions(transactions: list) -> list:
                 "date": t.get("Дата платежа"),
                 "amount": t.get("Сумма операции с округлением"),
                 "category": t.get("Категория"),
-                "description": t.get("Описание")
+                "description": t.get("Описание"),
             }
             formatted_transactions.append(transaction)
         return formatted_transactions

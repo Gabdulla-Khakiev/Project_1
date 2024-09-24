@@ -1,8 +1,10 @@
 import os
 import unittest
-from unittest.mock import patch
 from unittest import mock
+from unittest.mock import patch
+
 import requests
+
 from src.external_api import get_exchange_rate, get_sp500_stock_price
 
 
@@ -13,14 +15,9 @@ def test_get_exchange_rate_success(mock_get):
     mock_response = {
         "base": "USD",
         "date": "2021-03-17",
-        "rates": {
-            "RUB": 75.0,
-            "EUR": 0.813399,
-            "GBP": 0.72007,
-            "JPY": 107.346001
-        },
+        "rates": {"RUB": 75.0, "EUR": 0.813399, "GBP": 0.72007, "JPY": 107.346001},
         "success": True,
-        "timestamp": 1519296206
+        "timestamp": 1519296206,
     }
 
     # Настройка mock-ответа для requests.get
@@ -55,7 +52,7 @@ def test_get_exchange_rate_failure(mock_get):
 
 class TestGetSP500StockPrice(unittest.TestCase):
 
-    @mock.patch('requests.get')
+    @mock.patch("requests.get")
     def test_get_sp500_stock_price_success(self, mock_get):
         # Имитация ответа API
         mock_response = {
@@ -69,7 +66,7 @@ class TestGetSP500StockPrice(unittest.TestCase):
                 "07. latest trading day": "2024-09-23",
                 "08. previous close": "217.7000",
                 "09. change": "2.7400",
-                "10. change percent": "1.2586%"
+                "10. change percent": "1.2586%",
             }
         }
 
@@ -84,7 +81,7 @@ class TestGetSP500StockPrice(unittest.TestCase):
         self.assertEqual(price, 220.44)
         mock_get.assert_called_once()  # Проверка, что запрос был выполнен один раз
 
-    @mock.patch('requests.get')
+    @mock.patch("requests.get")
     def test_get_sp500_stock_price_error(self, mock_get):
         # Имитация ошибки при запросе
         mock_get.side_effect = requests.exceptions.RequestException("Ошибка сети")
@@ -96,7 +93,7 @@ class TestGetSP500StockPrice(unittest.TestCase):
         self.assertEqual(price, 0.0)
         mock_get.assert_called_once()  # Проверка, что запрос был выполнен один раз
 
-    @mock.patch('requests.get')
+    @mock.patch("requests.get")
     def test_get_sp500_stock_price_no_price(self, mock_get):
         # Имитация ответа API без цены
         mock_response = {
@@ -110,7 +107,7 @@ class TestGetSP500StockPrice(unittest.TestCase):
                 "07. latest trading day": "2024-09-23",
                 "08. previous close": "217.7000",
                 "09. change": "2.7400",
-                "10. change percent": "1.2586%"
+                "10. change percent": "1.2586%",
             }
         }
 
@@ -126,5 +123,5 @@ class TestGetSP500StockPrice(unittest.TestCase):
         mock_get.assert_called_once()  # Проверка, что запрос был выполнен один раз
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

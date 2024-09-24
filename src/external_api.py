@@ -1,21 +1,22 @@
-import requests
-import os
 import logging
+import os
+
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Настраиваем формат логов
-file_handler = logging.FileHandler('app.log', mode='a', encoding='utf-8')
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler = logging.FileHandler("app.log", mode="a", encoding="utf-8")
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(formatter)
 logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
-BASE_EXCHANGES_URL = 'https://api.apilayer.com/exchangerates_data/latest'
+BASE_EXCHANGES_URL = "https://api.apilayer.com/exchangerates_data/latest"
 EXCHANGES_API = os.getenv("EXCHANGES_API")
 
-BASE_SNP_URL = 'https://www.alphavantage.co/query'
-SNP_API = os.getenv('SNP_API')
+BASE_SNP_URL = "https://www.alphavantage.co/query"
+SNP_API = os.getenv("SNP_API")
 
 
 def get_exchange_rate(from_currency, to_currency="RUB"):

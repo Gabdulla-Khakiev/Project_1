@@ -1,9 +1,10 @@
 import json
-from functools import wraps
 import logging
-import pandas as pd
 from datetime import datetime, timedelta
+from functools import wraps
 from typing import Optional
+
+import pandas as pd
 
 # Настройка логирования
 logging.basicConfig(filename="reports.log", level=logging.INFO)
@@ -25,7 +26,7 @@ def save_report_to_file(filename: str = None):
                 file_name = filename
 
             # Записываем результат в файл
-            with open(file_name, 'w', encoding='utf-8') as file:
+            with open(file_name, "w", encoding="utf-8") as file:
                 json.dump(result, file, ensure_ascii=False, indent=4)
 
             # Логируем успешную запись
@@ -38,9 +39,7 @@ def save_report_to_file(filename: str = None):
 
 
 @save_report_to_file()  # Декоратор по умолчанию сохраняет результат в файл
-def spending_by_category(transactions: pd.DataFrame,
-                         category: str,
-                         date: Optional[str] = None) -> dict:
+def spending_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> dict:
     """Возвращает траты по заданной категории за последние три месяца от переданной даты."""
 
     # Если дата не указана, используем текущую дату
@@ -54,20 +53,20 @@ def spending_by_category(transactions: pd.DataFrame,
 
     # Фильтрация транзакций по категории и диапазону дат
     filtered_transactions = transactions[
-        (transactions['Категория'] == category) &
-        (pd.to_datetime(transactions['Дата операции']) >= start_date) &
-        (pd.to_datetime(transactions['Дата операции']) <= end_date)
-        ]
+        (transactions["Категория"] == category)
+        & (pd.to_datetime(transactions["Дата операции"]) >= start_date)
+        & (pd.to_datetime(transactions["Дата операции"]) <= end_date)
+    ]
 
     # Вычисляем общую сумму трат по категории
-    total_expenses = filtered_transactions['Сумма операции'].sum()
+    total_expenses = filtered_transactions["Сумма операции"].sum()
 
     # Возвращаем результат в виде словаря
     report = {
         "category": category,
         "start_date": start_date.strftime("%Y-%m-%d"),
         "end_date": end_date.strftime("%Y-%m-%d"),
-        "total_expenses": total_expenses
+        "total_expenses": total_expenses,
     }
 
     return report

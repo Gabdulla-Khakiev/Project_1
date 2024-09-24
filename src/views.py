@@ -1,22 +1,23 @@
 import json
 import logging
-from src.file_readers import read_transactions_from_excel
-from _datetime import datetime
-from src.utils import get_greeting, process_card_data, get_top_5_transactions
-from src.external_api import get_exchange_rate, get_sp500_stock_price
 from datetime import datetime
 
+from _datetime import datetime
 
-file_handler = logging.FileHandler('app.log', mode='a', encoding='utf-8')
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+from src.external_api import get_exchange_rate, get_sp500_stock_price
+from src.file_readers import read_transactions_from_excel
+from src.utils import get_greeting, get_top_5_transactions, process_card_data
+
+file_handler = logging.FileHandler("app.log", mode="a", encoding="utf-8")
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(formatter)
 logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
 
-def load_user_settings(file_path: str = 'data/user_settings.json') -> dict:
+def load_user_settings(file_path: str = "data/user_settings.json") -> dict:
     """Загружает пользовательские настройки из JSON-файла."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
         print(f"Файл {file_path} не найден.")
@@ -26,8 +27,8 @@ def load_user_settings(file_path: str = 'data/user_settings.json') -> dict:
         return {}
 
 
-settings = list(load_user_settings().get('user_currencies'))
-snp_settings = list(load_user_settings().get('user_stocks'))
+settings = list(load_user_settings().get("user_currencies"))
+snp_settings = list(load_user_settings().get("user_stocks"))
 
 
 def get_date_range(date_str: str) -> tuple:
@@ -63,14 +64,14 @@ def generate_report(datetime_str: str, transactions: list) -> str:
         "cards": card_info,
         "top_transactions": top_5_transactions,
         "currency_rates": exchange_rate,
-        "stock_prices": sp500_price
+        "stock_prices": sp500_price,
     }
 
     return json.dumps(response, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
-    transactions = read_transactions_from_excel('data/operations.xlsx')
+    transactions = read_transactions_from_excel("data/operations.xlsx")
     date_str = "2020-05-20 14:30:00"
     result = generate_report(date_str, transactions)
     print(result)
