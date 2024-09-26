@@ -11,5 +11,5 @@ if __name__ == "__main__":
     date_str = "2020-05-20 14:30:00"
     result = generate_report(date_str, transactions)
     services_result = find_phone_numbers(transactions)
-    reports_result = spending_by_category(df)
+    reports_result = spending_by_category(df, 'Супермаркеты', date_str)
     print(result)

@@ -12,10 +12,10 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(formatter)
 logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
-BASE_EXCHANGES_URL = "https://api.apilayer.com/exchangerates_data/latest"
+BASE_EXCHANGES_URL = os.getenv("BASE_EXCHANGES_URL")
 EXCHANGES_API = os.getenv("EXCHANGES_API")
 
-BASE_SNP_URL = "https://www.alphavantage.co/query"
+BASE_SNP_URL = os.getenv("BASE_SNP_URL")
 SNP_API = os.getenv("SNP_API")
 
 

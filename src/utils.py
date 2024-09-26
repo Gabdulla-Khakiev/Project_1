@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime
 
-
 file_handler = logging.FileHandler("app.log", mode="a", encoding="utf-8")
 formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(formatter)
@@ -22,13 +21,6 @@ def get_greeting(current_time: datetime) -> str:
 
     logging.info(f"Время: {current_time}, Приветствие: {greeting}")
     return greeting
-        return "Доброе утро"
-    elif 12 <= hour < 17:
-        return "Добрый день"
-    elif 17 <= hour < 22:
-        return "Добрый вечер"
-    else:
-        return "Доброй ночи"
 
 
 def process_card_data(transactions):
@@ -77,7 +69,7 @@ def process_card_data(transactions):
             )
             cards_information.append(card_info)
 
-    logging.info(f"Обработаны данные по {len(cards_information)} картам.")
+            logging.info(f"Обработаны данные по {len(cards_information)} картам.")
             cards_information.append(card_info)
 
     return cards_information
@@ -106,19 +98,3 @@ def get_top_5_transactions(transactions: list) -> list:
     except Exception as e:
         logging.error(f"Ошибка при сортировке транзакций: {e}")
         return []
-    sorted_transactions = []
-    transactions = sorted(transactions, key=lambda x: float(x.get('Сумма операции с округлением')), reverse=True)
-    for t in transactions:
-        transaction = {
-            "date": t.get("Дата платежа"),
-            "amount": t.get("Сумма платежа"),
-            "category": t.get("Категория"),
-            "description": t.get("Описание")
-        }
-        sorted_transactions.append(transaction)
-    return sorted_transactions[:5]
-
-
-if __name__ == "__main__":
-    transactions = read_transactions_from_excel('data/operations.xlsx')
-    print(process_card_data(transactions))
