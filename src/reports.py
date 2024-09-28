@@ -54,8 +54,8 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: Option
     # Фильтрация транзакций по категории и диапазону дат
     filtered_transactions = transactions[
         (transactions["Категория"] == category)
-        & (pd.to_datetime(transactions["Дата операции"]) >= start_date)
-        & (pd.to_datetime(transactions["Дата операции"]) <= end_date)
+        & (pd.to_datetime(transactions["Дата операции"], dayfirst=True) >= start_date)
+        & (pd.to_datetime(transactions["Дата операции"], dayfirst=True) <= end_date)
     ]
 
     # Вычисляем общую сумму трат по категории

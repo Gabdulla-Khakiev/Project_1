@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from src.file_readers import read_transactions_from_excel
 
 file_handler = logging.FileHandler("app.log", mode="a", encoding="utf-8")
 formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
@@ -46,11 +47,6 @@ def process_card_data(transactions):
                 continue
             # Получаем сумму операции
             amount = float(transaction.get("Сумма операции с округлением"))
-            # Если карта уже есть в словаре, добавляем сумму, иначе создаем запись
-            if card_number in cards_summary:
-                cards_summary[card_number] += amount
-            else:
-                cards_summary[card_number] = amount
 
     cards_summ = [{"Номер карты": key, "Сумма трат": value} for key, value in cards_summary.items()]
 
@@ -70,7 +66,6 @@ def process_card_data(transactions):
             cards_information.append(card_info)
 
             logging.info(f"Обработаны данные по {len(cards_information)} картам.")
-            cards_information.append(card_info)
 
     return cards_information
 
