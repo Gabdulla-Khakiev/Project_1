@@ -12,16 +12,13 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(formatter)
 logging.basicConfig(level=logging.INFO, handlers=[file_handler])
 
-BASE_EXCHANGES_URL = os.getenv("BASE_EXCHANGES_URL")
 EXCHANGES_API = os.getenv("EXCHANGES_API")
-
-BASE_SNP_URL = os.getenv("BASE_SNP_URL")
 SNP_API = os.getenv("SNP_API")
 
 
 def get_exchange_rate(from_currency, to_currency="RUB"):
     """Получает курс валюты через Exchange Rates Data API."""
-    url = f"{BASE_EXCHANGES_URL}?symbols={to_currency}&base={from_currency}"
+    url = f"https://api.apilayer.com/exchangerates_data/latest?symbols={to_currency}&base={from_currency}"
     headers = {"apikey": EXCHANGES_API}
 
     try:
@@ -46,7 +43,7 @@ def get_exchange_rate(from_currency, to_currency="RUB"):
 
 def get_sp500_stock_price(symbol):
     """Возвращает текущую стоимость акции из S&P 500."""
-    url = f"{BASE_SNP_URL}?function=GLOBAL_QUOTE&symbol={symbol}&apikey={SNP_API}"
+    url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={SNP_API}"
 
     try:
         logging.info(f"Запрос стоимости акции: {symbol}")
