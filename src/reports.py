@@ -59,7 +59,7 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: Option
     ]
 
     # Вычисляем общую сумму трат по категории
-    total_expenses = filtered_transactions["Сумма операции"].sum() * (-1)
+    total_expenses = str(filtered_transactions["Сумма операции"].sum() * (-1))
 
     # Возвращаем результат в виде словаря
     report = {
