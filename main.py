@@ -8,8 +8,10 @@ from src.file_readers import read_transactions_from_excel
 if __name__ == "__main__":
     transactions = read_transactions_from_excel("data/operations.xlsx")
     df = pd.DataFrame(transactions)
-    date_str = "2020-05-20 14:30:00"
+    date_str = "2020-05-20"
     result = generate_report(date_str, transactions)
     services_result = find_phone_numbers(transactions)
     reports_result = spending_by_category(df, 'Супермаркеты', date_str)
     print(result)
+    print(services_result)
+    print(reports_result)
